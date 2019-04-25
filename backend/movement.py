@@ -1,70 +1,89 @@
 import csv
 import math
-#import os
-#def calculatingSegments():
 def writeTofile(filename,Elbows):
     file = open(filename, "w")
     for i in Elbows:
         file.write(str(i) + ',')
     file.close()
+def calsegments(x1,y1,z1,x2,y2,z2):
+    '''math.sqrt(((pt4x - pt5x) * (pt4x - pt5x)) + ((pt4y - pt5y) * (pt4y - pt5y)) + ((pt4z - pt5z) * (pt4z - pt5z)))'''
+    segment = math.sqrt(((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2))+((z1-z2)*(z1-z2)))
+    return segment
+
+
+'''Calculating all the segments and angles'''
 def segs(array):
     Elbows=[]
     Humeral=[]
-    for row in array:  # reading in all the points from the file
-        for i in range(len(array)):
-            pt1x = array[i][0]
-            pt1y = array[i][1]
-            pt1z = array[i][2]
-            pt2x = array[i][3]
-            pt2y = array[i][4]
-            pt2z = array[i][5]
-            pt3x = array[i][6]
-            pt3y = array[i][7]
-            pt3z = array[i][8]
-            pt4x = array[i][9]
-            pt4y = array[i][10]
-            pt4z = array[i][11]
-            pt5x = array[i][12]
-            pt5y = array[i][13]
-            pt5z = array[i][14]
-            pt6x = array[i][15]
-            pt6y = array[i][16]
-            pt6z = array[i][17]
-            """Calculating all the segments"""
-            segmentA = math.sqrt(((pt4x - pt5x) * (pt4x - pt5x)) + ((pt4y - pt5y) * (pt4y - pt5y)) + ((pt4z - pt5z) * (pt4z - pt5z)))
-            # print(segmentA)
-            segmentB = math.sqrt(((pt5x - pt6x) * (pt5x - pt6x)) + ((pt5y - pt6y) * (pt5y - pt6y)) + ((pt5z - pt6z) * (pt5z - pt6z)))
-            segmentC = math.sqrt(((pt4x - pt6x) * (pt4x - pt6x)) + ((pt4y - pt6y) * (pt4y - pt6y)) + ((pt4z - pt6z) * (pt4z - pt6z)))
+    Extension=[]
+    Retraction=[]
+    for i in range(len(array[0])):
+        pt1x = array[0][i]
+        pt1y = array[1][i]
+        pt1z = array[2][i]
+        pt2x = array[3][i]
+        pt2y = array[4][i]
+        pt2z = array[5][i]
+        pt3x = array[6][i]
+        pt3y = array[7][i]
+        pt3z = array[8][i]
+        pt4x = array[9][i]
+        pt4y = array[10][i]
+        pt4z = array[11][i]
+        pt5x = array[12][i]
+        pt5y = array[13][i]
+        pt5z = array[14][i]
+        pt6x = array[15][i]
+        pt6y = array[16][i]
+        pt6z = array[17][i]
 
-            segmentD= math.sqrt(((pt1x - pt2x) * (pt1x - pt2x)) + ((pt1y - pt2y) * (pt1y - pt2y))+ ((pt1z - pt2z) * (pt1z - pt2z)))
 
-            pt5xPrime = (pt5x + (pt2x - pt4x))
-            pt5yPrime = (pt5x + (pt2y - pt4y))
-            pt5zPrime = (pt5x + (pt2z - pt4z))
+        """Calculating all the segments"""
+        segmentA=calsegments(pt4x,pt4y,pt4z,pt5x,pt5y,pt5z)
+        segmentB=calsegments(pt5x,pt5y,pt5z,pt6x,pt6y,pt6z)
+        segmentC=calsegments(pt4x,pt4y,pt4z,pt6x,pt6y,pt6z)
+        '''The extension angle calculated and appended to the array of all the extension angles'''
+        ElboFelectionExtentio = math.degrees(math.acos((((segmentC * segmentC) - (segmentA * segmentA) - (segmentB * segmentB))/((-2) * segmentA * segmentB))))
+        compElboFelectionExtentio = 180-ElboFelectionExtentio
+        Extension.append(compElboFelectionExtentio)
 
-            pt5xPrime2 = (pt5x + (pt3x - pt4x))
-            pt5yPrime2 = (pt5x + (pt3y - pt4y))
-            pt5zPrime2 = (pt5x + (pt3z - pt4z))
 
-            segmentE = math.sqrt(((pt2x - pt5xPrime) * (pt2x - pt5xPrime)) + ((pt2y - pt5yPrime) * (pt2y - pt5yPrime)) + ((pt2z - pt5zPrime) * (pt2z - pt5zPrime)))
-            segmentF = math.sqrt(((pt5xPrime - pt1x) * (pt5xPrime - pt1x)) + ((pt5yPrime - pt1y) * (pt5yPrime - pt1y)) + ((pt5zPrime - pt1z) * (pt5zPrime - pt1z)))
 
-            segmentG = math.sqrt(((pt3x - pt2x) * (pt3x - pt2x)) + ((pt3y - pt2y) * (pt3y - pt2y)) + ((pt3z - pt2z) * (pt3z - pt2z)))
-            segmentH = math.sqrt(((pt3x - pt5xPrime) * (pt3x - pt5xPrime)) + ((pt3y - pt5yPrime) * (pt3y - pt5yPrime)) + ((pt3z - pt5zPrime) * (pt3z - pt5zPrime)))
-            segmentI = math.sqrt(((pt5xPrime2 - pt2x) * (pt5xPrime2 - pt2x)) + ((pt5yPrime2 - pt2y) * (pt5yPrime2 - pt2y)) + ((pt5zPrime2 - pt2z) * (pt5zPrime2 - pt2z)))
 
-            """calculating the complements"""
-            ElboFelectionExtentio = math.acos((((segmentC * segmentC) - (segmentA * segmentA) - (segmentB * segmentB)) / (-2 * segmentA * segmentB)))
-            #ComplementOfHumeralProRet = math.acos((((segmentF)*(segmentF)) - ((segmentD)*(segmentD)) - ((segmentE) * (segmentD))) / (-2 * segmentD * segmentE))
-            #HumeralDepressionElevation = math.acos((((segmentI * segmentI) - (segmentH * segmentH) - (segmentG * segmentG))/(-2 * segmentG * segmentB)))
 
-           # humeralPR=180-ComplementOfHumeralProRet
-            Elbows.append(ElboFelectionExtentio)
-            #Humeral.append(ComplementOfHumeralProRet)
 
-    writeTofile("TaloseHoplbowAngles1.csv", Elbows)
+        pt5xPrime = (pt5x + (pt2x - pt4x))
+        pt5yPrime = (pt5y + (pt2y - pt4y))
+        pt5zPrime = (pt5z + (pt2z - pt4z))
+
+        pt5xPrime2 = (pt5x + (pt3x - pt4x))
+        pt5yPrime2 = (pt5y + (pt3y - pt4y))
+        pt5zPrime2 = (pt5z + (pt3z - pt4z))
+
+        segmentD = calsegments(pt1x, pt1y, pt1z, pt2x, pt2y, pt2z)
+        segmentE = calsegments(pt2x, pt2y, pt2z, pt5xPrime, pt5yPrime, pt5zPrime)
+        segmentF = calsegments(pt5xPrime, pt5yPrime, pt5zPrime, pt1x, pt1y, pt1z)
+
+        '''The retractioion angle calculated and appended to the array of all the retraction angles'''
+        ComplementOfHumeralProRet = math.degrees(math.acos((((segmentF * segmentF) - (segmentD * segmentD) - (segmentE * segmentE)) / ((-2) * segmentD * segmentE))))
+        HumeProRetr=180-ComplementOfHumeralProRet
+
+        segmentG = calsegments(pt3x,pt3y,pt3z,pt2x,pt2y,pt2z)
+        segmentH = calsegments(pt3x,pt3y,pt3z,pt5xPrime2,pt5yPrime2,pt5zPrime2)
+        SegmentI = calsegments(pt5xPrime2,pt5yPrime2,pt5zPrime2,pt2x,pt2y,pt2z)
+
+        """The Depression angle calculated and appended to the array of all the retraction angles"""
+        HumeralDepressionElevation = math.degrees(math.acos((((SegmentI * SegmentI) - (segmentH * segmentH) - (segmentG * segmentG))/(-2 * segmentG * segmentH))))
+        humeralPR=180-HumeralDepressionElevation
+        Retraction.append(humeralPR)
+        Elbows.append(ElboFelectionExtentio)
+        Humeral.append(HumeProRetr)
+
+    writeTofile("TaloseHopElbowAngles1.csv",Elbows)
+    writeTofile("TaloseHopHumeralAngles1.csv",Humeral)
+    writeTofile("TaloseHopExtensionAngles1.csv",Extension)
+    writeTofile("TaloseHopReatractionAngles1.csv",Retraction)
 def fileread(file):
-    #print(math.pi)
     pt1X = []
     pt1Y = []
     pt1Z = []
