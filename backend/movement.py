@@ -1,9 +1,12 @@
 import csv
 import math
+import pandas as pd
+import numpy as np
 def writeTofile(filename,Elbows):
     file = open(filename, "w")
+    file.write("Elbow_extension\n")
     for i in Elbows:
-        file.write(str(i) + ',')
+        file.write(str(i)+"\n")
     file.close()
 def calsegments(x1,y1,z1,x2,y2,z2):
     '''math.sqrt(((pt4x - pt5x) * (pt4x - pt5x)) + ((pt4y - pt5y) * (pt4y - pt5y)) + ((pt4z - pt5z) * (pt4z - pt5z)))'''
@@ -13,7 +16,7 @@ def calsegments(x1,y1,z1,x2,y2,z2):
 
 '''Calculating all the segments and angles'''
 def segs(array):
-    Elbows=[]
+    together=[];
     Humeral=[]
     Extension=[]
     Retraction=[]
@@ -47,11 +50,6 @@ def segs(array):
         compElboFelectionExtentio = 180-ElboFelectionExtentio
         Extension.append(compElboFelectionExtentio)
 
-
-
-
-
-
         pt5xPrime = (pt5x + (pt2x - pt4x))
         pt5yPrime = (pt5y + (pt2y - pt4y))
         pt5zPrime = (pt5z + (pt2z - pt4z))
@@ -67,6 +65,7 @@ def segs(array):
         '''The retractioion angle calculated and appended to the array of all the retraction angles'''
         ComplementOfHumeralProRet = math.degrees(math.acos((((segmentF * segmentF) - (segmentD * segmentD) - (segmentE * segmentE)) / ((-2) * segmentD * segmentE))))
         HumeProRetr=180-ComplementOfHumeralProRet
+        Humeral.append(HumeProRetr)
 
         segmentG = calsegments(pt3x,pt3y,pt3z,pt2x,pt2y,pt2z)
         segmentH = calsegments(pt3x,pt3y,pt3z,pt5xPrime2,pt5yPrime2,pt5zPrime2)
@@ -76,13 +75,16 @@ def segs(array):
         HumeralDepressionElevation = math.degrees(math.acos((((SegmentI * SegmentI) - (segmentH * segmentH) - (segmentG * segmentG))/(-2 * segmentG * segmentH))))
         humeralPR=180-HumeralDepressionElevation
         Retraction.append(humeralPR)
-        Elbows.append(ElboFelectionExtentio)
-        Humeral.append(HumeProRetr)
+    data={'el_fle-ext':Extension,
+          'hum_dep_ele':Humeral,'hum_pro_retra':HumeProRetr}
+    df=pd.DataFrame(data)
+    print(df[['el_fle-ext','hum_dep_ele','hum_pro_retra']])
 
-    writeTofile("TaloseHopElbowAngles1.csv",Elbows)
-    writeTofile("TaloseHopHumeralAngles1.csv",Humeral)
-    writeTofile("TaloseHopExtensionAngles1.csv",Extension)
-    writeTofile("TaloseHopReatractionAngles1.csv",Retraction)
+    df.to_csv("CSVdata/angles.csv", encoding='utf-8', index=False)
+    writeTofile("CSVdata/humeral.csv", Extension)
+    writeTofile("CSVdata/humeralpro.csv", Humeral)
+    #writeTofile("CSVdata/TaloseHopExtensionAngles1.csv",together)
+    #writeTofile("CSVdata/TaloseHopReatractionAngles1.csv",together)
 def fileread(file):
     pt1X = []
     pt1Y = []
@@ -146,7 +148,7 @@ def fileread(file):
     AlltehPoints.append(pt6Z)
     return AlltehPoints
 def main():
-    allpoints=fileread("atlashopS.csv")
+    allpoints=fileread("CSVdata/atlashopS.csv")
     segs(allpoints)
 if __name__== '__main__':
         main()
