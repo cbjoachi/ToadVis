@@ -76,7 +76,7 @@ def segs(array):
         humeralPR=180-HumeralDepressionElevation
         Retraction.append(humeralPR)
     data={'el_fle-ext':Extension,
-          'hum_dep_ele':Humeral,'hum_pro_retra':HumeProRetr}
+          'hum_dep_ele':Humeral,'hum_pro_retra':Retraction}
     df=pd.DataFrame(data)
     print(df[['el_fle-ext','hum_dep_ele','hum_pro_retra']])
 
