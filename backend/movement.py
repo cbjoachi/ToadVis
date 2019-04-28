@@ -1,5 +1,6 @@
 import csv
 import math
+#import plotly as py
 import pandas as pd
 import numpy as np
 def writeTofile(filename,Elbows):
@@ -12,11 +13,8 @@ def calsegments(x1,y1,z1,x2,y2,z2):
     '''math.sqrt(((pt4x - pt5x) * (pt4x - pt5x)) + ((pt4y - pt5y) * (pt4y - pt5y)) + ((pt4z - pt5z) * (pt4z - pt5z)))'''
     segment = math.sqrt(((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2))+((z1-z2)*(z1-z2)))
     return segment
-
-
 '''Calculating all the segments and angles'''
 def segs(array):
-    together=[];
     Humeral=[]
     Extension=[]
     Retraction=[]
@@ -83,8 +81,7 @@ def segs(array):
     df.to_csv("CSVdata/angles.csv", encoding='utf-8', index=False)
     writeTofile("CSVdata/humeral.csv", Extension)
     writeTofile("CSVdata/humeralpro.csv", Humeral)
-    #writeTofile("CSVdata/TaloseHopExtensionAngles1.csv",together)
-    #writeTofile("CSVdata/TaloseHopReatractionAngles1.csv",together)
+
 def fileread(file):
     pt1X = []
     pt1Y = []
