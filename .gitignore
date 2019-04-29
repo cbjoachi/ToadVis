@@ -1,0 +1,6 @@
+#Dont track content of this folder
+venv/
+*pyc
+__pycache__/
+instance/
+*egg-info/
