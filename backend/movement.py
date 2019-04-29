@@ -78,7 +78,7 @@ def segs(array):
     df=pd.DataFrame(data)
     print(df[['el_fle-ext','hum_dep_ele','hum_pro_retra']])
 
-    df.to_csv("CSVdata/Atlas/hop47/angle.csv", encoding='utf-8', index=False)
+    df.to_csv("CSVdata/Fortuna/hop53/angle.csv", encoding='utf-8', index=False)
     #writeTofile("CSVdata/humeral.csv", Extension)
     #writeTofile("CSVdata/humeralpro.csv", Humeral)
 
@@ -145,7 +145,7 @@ def fileread(file):
     AlltehPoints.append(pt6Z)
     return AlltehPoints
 def main():
-    allpoints=fileread("CSVdata/Atlas/hop47/AtlasHop47DLTdv5_data_xyzpts.csv")
+    allpoints=fileread("CSVdata/Fortuna/hop53/Hop53DLTdv5_data_xyzpts.csv")
     segs(allpoints)
 if __name__== '__main__':
         main()
