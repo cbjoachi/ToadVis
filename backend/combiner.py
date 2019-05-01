@@ -13,11 +13,12 @@ all_filenames = [i for i in glob.glob('*.{}'.format(extension))]
 all_names = []
 for fn in all_filenames:
 	newstr = fn.replace("."+extension, "")
+	print(newstr)
 	all_names.append(newstr)
 
-def combine( col_num, col_name):
+def combine( col_num0,col_name):
 	#combine columns from all files into one csv
-	combined = pd.concat([pd.read_csv(f, usecols = [col_num]) for f in all_filenames ], axis = 1)
+	combined = pd.concat([pd.read_csv(f, usecols =[col_num0]) for f in all_filenames ], axis = 1)
 	combined.columns = all_names
 	#slice
 	max = combined.idxmax()
@@ -34,8 +35,7 @@ def combine( col_num, col_name):
 	#export to csv
 	# combined.to_csv("combined.csv", index=False, encoding='utf-8-sig')
 	normal.to_csv( sys.argv[2] + "fp" + col_name + ".csv", index=False, encoding='utf-8-sig')
-	
+	#combine(0,1,2,"forces")
 combine(0,"lateral")
 combine(1,"fore")
 combine(2,"normal")
-
